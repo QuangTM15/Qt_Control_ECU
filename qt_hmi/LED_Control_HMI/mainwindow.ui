@@ -1,184 +1,571 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="comboBoxPort">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>20</y>
-      <width>181</width>
-      <height>71</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonRefresh">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>20</y>
-      <width>131</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Refresh</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="sliderBrightness">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>290</y>
-      <width>311</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelLedControl">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>130</y>
-      <width>91</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>LED Control</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonConnect">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>20</y>
-      <width>141</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Connect</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonOn">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>130</y>
-      <width>171</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ON</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonOff">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>130</y>
-      <width>171</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>OFF</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelBrightnessTitle">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>250</y>
-      <width>361</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Brightness</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelBrightnessValue">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>290</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>100%</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelLog">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>380</y>
-      <width>361</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ECU Log</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="plainTextEditLog">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>424</y>
-      <width>591</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
- <resources/>
- <connections/>
+    <class>MainWindow</class>
+
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>900</width>
+                <height>650</height>
+            </rect>
+        </property>
+
+        <property name="minimumSize">
+            <size>
+                <width>760</width>
+                <height>580</height>
+            </size>
+        </property>
+
+        <property name="windowTitle">
+            <string>S32K144 LED Control HMI</string>
+        </property>
+
+        <property name="styleSheet">
+            <string notr="true">
+                QMainWindow {
+                background-color: #eef2f7;
+                }
+
+                QWidget#centralwidget {
+                background-color: #eef2f7;
+                }
+
+                QLabel {
+                color: #1f2937;
+                font-family: "Segoe UI";
+                font-size: 14px;
+                }
+
+                QLabel#labelTitle {
+                color: #ffffff;
+                font-size: 24px;
+                font-weight: 700;
+                }
+
+                QLabel#labelSubtitle {
+                color: #cbd5e1;
+                font-size: 13px;
+                }
+
+                QLabel#labelConnectionTitle,
+                QLabel#labelLedControl,
+                QLabel#labelLog {
+                color: #0f172a;
+                font-size: 17px;
+                font-weight: 700;
+                }
+
+                QLabel#labelBrightnessTitle {
+                color: #334155;
+                font-size: 14px;
+                font-weight: 600;
+                }
+
+                QLabel#labelBrightnessValue {
+                color: #2563eb;
+                font-size: 22px;
+                font-weight: 700;
+                }
+
+                QFrame#headerFrame {
+                background-color: #0f172a;
+                border-radius: 14px;
+                }
+
+                QFrame#connectionCard,
+                QFrame#controlCard,
+                QFrame#logCard {
+                background-color: #ffffff;
+                border: 1px solid #dbe3ee;
+                border-radius: 14px;
+                }
+
+                QComboBox {
+                min-height: 42px;
+                padding-left: 14px;
+                padding-right: 12px;
+                color: #111827;
+                background-color: #f8fafc;
+                border: 1px solid #cbd5e1;
+                border-radius: 8px;
+                font-size: 14px;
+                }
+
+                QComboBox:hover {
+                border: 1px solid #60a5fa;
+                }
+
+                QComboBox:focus {
+                border: 2px solid #3b82f6;
+                }
+
+                QComboBox::drop-down {
+                border: none;
+                width: 32px;
+                }
+
+                QPushButton {
+                min-height: 42px;
+                padding: 0 20px;
+                border-radius: 8px;
+                font-family: "Segoe UI";
+                font-size: 14px;
+                font-weight: 600;
+                }
+
+                QPushButton#buttonRefresh {
+                color: #334155;
+                background-color: #e2e8f0;
+                border: 1px solid #cbd5e1;
+                }
+
+                QPushButton#buttonRefresh:hover {
+                background-color: #cbd5e1;
+                }
+
+                QPushButton#buttonConnect {
+                color: #ffffff;
+                background-color: #2563eb;
+                border: 1px solid #2563eb;
+                }
+
+                QPushButton#buttonConnect:hover {
+                background-color: #1d4ed8;
+                }
+
+                QPushButton#buttonConnect:pressed {
+                background-color: #1e40af;
+                }
+
+                QPushButton#buttonOn {
+                min-height: 64px;
+                color: #ffffff;
+                background-color: #16a34a;
+                border: 1px solid #16a34a;
+                font-size: 17px;
+                }
+
+                QPushButton#buttonOn:hover {
+                background-color: #15803d;
+                }
+
+                QPushButton#buttonOn:pressed {
+                background-color: #166534;
+                }
+
+                QPushButton#buttonOff {
+                min-height: 64px;
+                color: #ffffff;
+                background-color: #dc2626;
+                border: 1px solid #dc2626;
+                font-size: 17px;
+                }
+
+                QPushButton#buttonOff:hover {
+                background-color: #b91c1c;
+                }
+
+                QPushButton#buttonOff:pressed {
+                background-color: #991b1b;
+                }
+
+                QPushButton:disabled {
+                color: #94a3b8;
+                background-color: #e2e8f0;
+                border: 1px solid #cbd5e1;
+                }
+
+                QSlider::groove:horizontal {
+                height: 8px;
+                background-color: #dbe3ee;
+                border-radius: 4px;
+                }
+
+                QSlider::sub-page:horizontal {
+                background-color: #3b82f6;
+                border-radius: 4px;
+                }
+
+                QSlider::add-page:horizontal {
+                background-color: #dbe3ee;
+                border-radius: 4px;
+                }
+
+                QSlider::handle:horizontal {
+                width: 22px;
+                height: 22px;
+                margin: -7px 0;
+                background-color: #ffffff;
+                border: 3px solid #2563eb;
+                border-radius: 11px;
+                }
+
+                QSlider::handle:horizontal:hover {
+                border: 3px solid #1d4ed8;
+                }
+
+                QPlainTextEdit {
+                color: #d1fae5;
+                background-color: #111827;
+                border: 1px solid #1f2937;
+                border-radius: 10px;
+                padding: 12px;
+                font-family: "Consolas";
+                font-size: 13px;
+                selection-background-color: #2563eb;
+                }
+
+                QStatusBar {
+                color: #475569;
+                background-color: #eef2f7;
+                }
+            </string>
+        </property>
+
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="mainLayout">
+
+                <property name="leftMargin">
+                    <number>28</number>
+                </property>
+                <property name="topMargin">
+                    <number>24</number>
+                </property>
+                <property name="rightMargin">
+                    <number>28</number>
+                </property>
+                <property name="bottomMargin">
+                    <number>24</number>
+                </property>
+                <property name="spacing">
+                    <number>18</number>
+                </property>
+
+                <item>
+                    <widget class="QFrame" name="headerFrame">
+                        <property name="minimumSize">
+                            <size>
+                                <width>0</width>
+                                <height>105</height>
+                            </size>
+                        </property>
+
+                        <layout class="QVBoxLayout" name="headerLayout">
+                            <property name="leftMargin">
+                                <number>28</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>20</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>28</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>20</number>
+                            </property>
+
+                            <item>
+                                <widget class="QLabel" name="labelTitle">
+                                    <property name="text">
+                                        <string>S32K144 LED Control HMI</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QLabel" name="labelSubtitle">
+                                    <property name="text">
+                                        <string>UART-based control interface • AUTOSAR-inspired ECU
+                                            architecture</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+
+                <item>
+                    <widget class="QFrame" name="connectionCard">
+                        <layout class="QVBoxLayout" name="connectionCardLayout">
+                            <property name="leftMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>18</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>20</number>
+                            </property>
+                            <property name="spacing">
+                                <number>14</number>
+                            </property>
+
+                            <item>
+                                <widget class="QLabel" name="labelConnectionTitle">
+                                    <property name="text">
+                                        <string>Serial Connection</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <layout class="QHBoxLayout" name="connectionLayout">
+                                    <property name="spacing">
+                                        <number>12</number>
+                                    </property>
+
+                                    <item>
+                                        <widget class="QComboBox" name="comboBoxPort">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                                    <horstretch>1</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                        </widget>
+                                    </item>
+
+                                    <item>
+                                        <widget class="QPushButton" name="buttonRefresh">
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>120</width>
+                                                    <height>0</height>
+                                                </size>
+                                            </property>
+                                            <property name="text">
+                                                <string>Refresh</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+
+                                    <item>
+                                        <widget class="QPushButton" name="buttonConnect">
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>140</width>
+                                                    <height>0</height>
+                                                </size>
+                                            </property>
+                                            <property name="text">
+                                                <string>Connect</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+
+                <item>
+                    <widget class="QFrame" name="controlCard">
+                        <layout class="QVBoxLayout" name="controlCardLayout">
+                            <property name="leftMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>18</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="spacing">
+                                <number>18</number>
+                            </property>
+
+                            <item>
+                                <widget class="QLabel" name="labelLedControl">
+                                    <property name="text">
+                                        <string>LED Control</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <layout class="QHBoxLayout" name="buttonLayout">
+                                    <property name="spacing">
+                                        <number>16</number>
+                                    </property>
+
+                                    <item>
+                                        <widget class="QPushButton" name="buttonOn">
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>TURN ON</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+
+                                    <item>
+                                        <widget class="QPushButton" name="buttonOff">
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>TURN OFF</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+
+                            <item>
+                                <layout class="QHBoxLayout" name="brightnessHeaderLayout">
+                                    <item>
+                                        <widget class="QLabel" name="labelBrightnessTitle">
+                                            <property name="text">
+                                                <string>Brightness</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+
+                                    <item>
+                                        <spacer name="brightnessHeaderSpacer">
+                                            <property name="orientation">
+                                                <enum>Qt::Orientation::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                                <size>
+                                                    <width>40</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </item>
+
+                                    <item>
+                                        <widget class="QLabel" name="labelBrightnessValue">
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>70</width>
+                                                    <height>34</height>
+                                                </size>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>
+                                                    Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter</set>
+                                            </property>
+                                            <property name="text">
+                                                <string>0%</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+
+                            <item>
+                                <widget class="QSlider" name="sliderBrightness">
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>0</width>
+                                            <height>38</height>
+                                        </size>
+                                    </property>
+                                    <property name="minimum">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>100</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="singleStep">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="pageStep">
+                                        <number>10</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Qt::Orientation::Horizontal</enum>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+
+                <item>
+                    <widget class="QFrame" name="logCard">
+                        <layout class="QVBoxLayout" name="logCardLayout">
+                            <property name="leftMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>18</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>22</number>
+                            </property>
+                            <property name="spacing">
+                                <number>12</number>
+                            </property>
+
+                            <item>
+                                <widget class="QLabel" name="labelLog">
+                                    <property name="text">
+                                        <string>ECU Communication Log</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QPlainTextEdit" name="plainTextEditLog">
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>0</width>
+                                            <height>130</height>
+                                        </size>
+                                    </property>
+                                    <property name="placeholderText">
+                                        <string>UART messages from the S32K144 ECU will appear
+                                            here...</string>
+                                    </property>
+                                    <property name="readOnly">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+
+            </layout>
+        </widget>
+
+        <widget class="QMenuBar" name="menubar">
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>900</width>
+                    <height>26</height>
+                </rect>
+            </property>
+        </widget>
+
+        <widget class="QStatusBar" name="statusbar" />
+
+    </widget>
+
+    <resources />
+    <connections />
 </ui>
