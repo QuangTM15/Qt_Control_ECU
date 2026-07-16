@@ -1,47 +1,64 @@
 /**
  * @file main.c
- * @brief UART Echo Test.
+ * @brief Main integration for the AUTOSAR-inspired LED Control ECU.
  */
 
 #include <stdint.h>
 
 #include "Mcal_Clock.h"
-#include "Mcal_Uart.h"
+#include "IoHwAb_Led.h"
+#include "ComService.h"
+#include "Rte_LedControl.h"
+#include "LedControl.h"
 
 int main(void)
 {
-    uint8_t rxData;
+    ComService_LedCommandType receivedCommand;
 
     /*
-     * Initialize system clock.
+     * Initialize the MCU system clock first.
      */
     Mcal_Clock_Init();
 
     /*
-     * Initialize UART.
+     * Initialize the LED hardware abstraction.
+     * This also initializes the PWM driver.
      */
-    Mcal_Uart_Init();
+    IoHwAb_Led_Init();
 
     /*
-     * Startup message.
+     * Initialize the LED application SWC.
+     * Initial state: LED OFF, stored brightness 100%.
      */
-    Mcal_Uart_SendString("\r\n");
-    Mcal_Uart_SendString("=================================\r\n");
-    Mcal_Uart_SendString(" S32K144 UART Echo Test\r\n");
-    Mcal_Uart_SendString(" Baudrate : 9600\r\n");
-    Mcal_Uart_SendString(" Type anything...\r\n");
-    Mcal_Uart_SendString("=================================\r\n");
+    LedControl_Init();
 
-    while (1)
+    /*
+     * Initialize UART communication.
+     * ECU sends "$READY\r\n" after startup.
+     */
+    ComService_Init();
+
+    for (;;)
     {
-        if (Mcal_Uart_IsDataAvailable() != 0U)
-        {
-            rxData = Mcal_Uart_ReadByte();
+        /*
+         * Receive UART bytes and parse complete commands.
+         */
+        ComService_MainFunction();
 
-            /*
-             * Echo received character.
-             */
-            Mcal_Uart_SendByte(rxData);
+        /*
+         * Transfer a valid command from Communication Service
+         * into the RTE.
+         */
+        if (ComService_GetCommand(&receivedCommand) != 0U)
+        {
+            Rte_LedControl_WriteCommand(
+                receivedCommand.ledState,
+                receivedCommand.brightness);
         }
+
+        /*
+         * Execute the LED Control runnable.
+         */
+        LedControl_MainFunction();
     }
 }
