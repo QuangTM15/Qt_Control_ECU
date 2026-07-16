@@ -9,57 +9,88 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(
+    QT NAMES Qt6 Qt5
+    REQUIRED COMPONENTS
+        Widgets
+        SerialPort
+)
+
+find_package(
+    Qt${QT_VERSION_MAJOR}
+    REQUIRED COMPONENTS
+        Widgets
+        SerialPort
+)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+    main.cpp
+
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+
+    services/serialmanager.cpp
+    services/serialmanager.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(LED_Control_HMI
+    qt_add_executable(
+        LED_Control_HMI
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET LED_Control_HMI APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(LED_Control_HMI SHARED
+        add_library(
+            LED_Control_HMI
+            SHARED
             ${PROJECT_SOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(LED_Control_HMI
+        add_executable(
+            LED_Control_HMI
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(LED_Control_HMI PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(
+    LED_Control_HMI
+    PRIVATE
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::SerialPort
+)
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
+target_include_directories(
+    LED_Control_HMI
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/services
+)
+
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.LED_Control_HMI)
+    set(
+        BUNDLE_ID_OPTION
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.example.LED_Control_HMI
+    )
 endif()
-set_target_properties(LED_Control_HMI PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+
+set_target_properties(
+    LED_Control_HMI
+    PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING
+            ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE TRUE
+        WIN32_EXECUTABLE TRUE
 )
 
 include(GNUInstallDirs)
-install(TARGETS LED_Control_HMI
+
+install(
+    TARGETS LED_Control_HMI
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
