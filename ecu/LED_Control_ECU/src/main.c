@@ -1,59 +1,47 @@
 /**
  * @file main.c
- * @brief IoHwAb LED test for the LED Control ECU.
+ * @brief UART Echo Test.
  */
 
 #include <stdint.h>
 
-#include "IoHwAb_Led.h"
-
-static void App_Delay(void)
-{
-    volatile uint32_t counter;
-
-    for (counter = 0UL; counter < 100000UL; counter++)
-    {
-        /* Busy wait for test only. */
-    }
-}
-
-static void App_LongDelay(void)
-{
-    volatile uint32_t counter;
-
-    for (counter = 0UL; counter < 1000000UL; counter++)
-    {
-        /* Busy wait for test only. */
-    }
-}
+#include "Mcal_Clock.h"
+#include "Mcal_Uart.h"
 
 int main(void)
 {
-    uint8_t brightness;
+    uint8_t rxData;
 
-    IoHwAb_Led_Init();
+    /*
+     * Initialize system clock.
+     */
+    Mcal_Clock_Init();
 
-    for (;;)
+    /*
+     * Initialize UART.
+     */
+    Mcal_Uart_Init();
+
+    /*
+     * Startup message.
+     */
+    Mcal_Uart_SendString("\r\n");
+    Mcal_Uart_SendString("=================================\r\n");
+    Mcal_Uart_SendString(" S32K144 UART Echo Test\r\n");
+    Mcal_Uart_SendString(" Baudrate : 9600\r\n");
+    Mcal_Uart_SendString(" Type anything...\r\n");
+    Mcal_Uart_SendString("=================================\r\n");
+
+    while (1)
     {
-        IoHwAb_Led_On();
-        App_LongDelay();
-
-        for (brightness = 100U; brightness > 0U; brightness -= 10U)
+        if (Mcal_Uart_IsDataAvailable() != 0U)
         {
-            IoHwAb_Led_SetBrightness(brightness);
-            App_Delay();
+            rxData = Mcal_Uart_ReadByte();
+
+            /*
+             * Echo received character.
+             */
+            Mcal_Uart_SendByte(rxData);
         }
-
-        IoHwAb_Led_Off();
-        App_LongDelay();
-
-        IoHwAb_Led_SetBrightness(30U);
-        App_LongDelay();
-
-        IoHwAb_Led_On();
-        App_LongDelay();
-
-        IoHwAb_Led_Off();
-        App_LongDelay();
     }
 }
